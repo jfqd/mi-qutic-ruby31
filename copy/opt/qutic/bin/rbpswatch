@@ -1,0 +1,41 @@
+#!/usr/bin/bash
+#
+# Watchdog for ruby processes
+#
+export HOME=/home/ruby/www/current/
+export PATH="/home/ruby/www/shared/gems/gem_home/bin:/home/ruby/www/shared/gems/gem_home/bin:/usr/local/sbin:/usr/local/bin:/opt/local/sbin:/opt/local/bin:/usr/sbin:/usr/bin:/sbin"
+export GEM_PATH="/home/ruby/www/shared/gems/gem_home:/opt/local/lib/ruby/gems/2.7.0"
+export GEM_HOME="/home/ruby/www/shared/gems/gem_home"
+export RAILS_ENV=production
+
+while true
+do
+  # ensure project was deployed
+  if [[ -L /home/ruby/www/current ]]; then
+    
+    # Start delayed_job, if no lock is present and no process is running
+    if [[ -x /home/ruby/www/current/script/delayed_job ]]; then
+      if [[ ! -f /home/ruby/www/current/.delayed_job_lock ]]; then
+        if [[ $(/usr/bin/pgrep -f .*delayed_job.* | /usr/bin/wc -l) -eq 0 ]]; then
+          /usr/bin/cd /home/ruby/www/current
+          /opt/local/bin/bundle exec ruby script/delayed_job start -n 2 || /usr/bin/echo "ruby script/delayed_job start: $?"
+        fi
+      fi
+    fi
+    
+    # Start searchd, if no lock is present and no process is running
+    if [[ $(/opt/local/bin/gem list thinking-sphinx | /opt/local/bin/grep 'thinking-sphinx'| /usr/bin/wc -l) -ge 1 ]]; then
+      if [[ ! -f /home/ruby/www/current/.searchd_lock ]]; then
+        if [[ $(/usr/bin/pgrep -f .*searchd.* | /usr/bin/wc -l) -eq 0 ]]; then
+          /usr/bin/cd /home/ruby/www/current
+          /opt/local/bin/bundle exec rake ts:start || /usr/bin/echo "rake ts:start: $?"
+        fi
+      fi
+    fi
+  
+  fi
+  # sleep 5 minutes
+  /usr/bin/sleep 300
+done
+
+exit 0

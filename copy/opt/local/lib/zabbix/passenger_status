@@ -1,0 +1,33 @@
+#!/opt/local/bin/ruby
+
+status = `/opt/local/sbin/passenger-status`
+unless $?.success?
+  $stderr.puts "failed executing passenger-status"
+  exit 1
+end
+
+if status =~ /Version : 3/
+  status =~ /Max\s+:\s+(\d+)/
+  puts "max.value #{$1}"
+
+  status =~ /Processes\s+:\s+(\d+)/
+  puts "running.value #{$1}"
+
+  total_sessions = 0
+  status.scan(/Sessions: (\d+)/).flatten.each { |count| total_sessions += count.to_i }
+  puts "sessions.value #{total_sessions}"
+else
+  # Passener 4 and up
+  status =~ /Max pool size\s+:\s+(\d+)/
+  puts "max.value #{$1}"
+
+  status =~ /Processes\s+:\s+(\d+)/
+  puts "running.value #{$1}"
+
+  active_processes = status.scan(/Sessions:\s+(\d+)/).flatten.select { |count| count.to_i != 0 }.size
+  puts "active.value #{active_processes}"
+
+  total_sessions = 0
+  status.scan(/Sessions: (\d+)/).flatten.each { |count| total_sessions += count.to_i }
+  puts "sessions.value #{total_sessions}"
+end

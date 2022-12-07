@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+DIR=$(dirname "${BASH_SOURCE[0]}")
+if [[ -f "$DIR/activate" ]]
+then
+  source "$DIR/activate"
+  exec bundle exec /opt/local/bin/ruby "$@"
+else
+  echo "ERROR: Missing gemenv environment file: '$DIR/activate'" >&2
+  exit 1
+fi

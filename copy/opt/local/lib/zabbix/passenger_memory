@@ -1,0 +1,9 @@
+#!/opt/local/bin/ruby
+
+status = `/opt/local/sbin/passenger-status`
+unless $?.success?
+  $stderr.puts "failed executing passenger-status"
+  exit 1
+end
+memory = status.scan(/Memory\s+:\s+(\d+)/).map {|i| i[0].to_i}.inject(0, :+)
+puts "memory.value #{memory}"

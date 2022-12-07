@@ -1,0 +1,22 @@
+#!/usr/bin/bash
+
+# sleep random time to prevent that all cron
+# scripts are starting at the same time!
+sleep $((RANDOM % 30))
+
+ZABBIX_CONF=/opt/local/etc/zabbix_agentd.conf
+
+export TMPDIR=/var/tmp
+export PASSENGER_INSTANCE_REGISTRY_DIR=/var/tmp
+
+function zsend {
+  /opt/local/bin/zabbix_sender -c $ZABBIX_CONF -k $1 -o $2
+}
+
+zsend passenger.memory   $(/opt/local/lib/zabbix/passenger_memory | awk '{print $2}')
+zsend passenger.running  $(/opt/local/lib/zabbix/passenger_status | grep 'running' | awk '{print $2}')
+zsend passenger.max      $(/opt/local/lib/zabbix/passenger_status | grep 'max' | awk '{print $2}')
+zsend passenger.active   $(/opt/local/lib/zabbix/passenger_status | grep 'active' | awk '{print $2}')
+zsend passenger.sessions $(/opt/local/lib/zabbix/passenger_status | grep 'sessions' | awk '{print $2}')
+
+exit 0

@@ -1,0 +1,9 @@
+#!/opt/local/bin/ruby
+
+status = `/usr/bin/ps -eo comm,vsz,rss | /opt/local/bin/grep httpd | /usr/bin/awk '{ print $2 }'`
+unless $?.success?
+  $stderr.puts "failed executing ps"
+  exit 1
+end
+memory = (status.split(/\n/).map {|i| i.to_i}.inject(0, :+) / 1024)
+puts "memory.value #{memory}"

@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# is the radiant config file stored under a wrong user?
+if [[ -f /home/ruby/www/current/tmp/radiant_config_cache.txt ]]; then
+  if [[ `/usr/bin/ls -al /home/ruby/www/current/tmp/radiant_config_cache.txt | /usr/bin/awk '{print $3}'` != "ruby" ]]; then
+    /usr/bin/rm /home/ruby/www/current/tmp/radiant_config_cache.txt
+    /usr/bin/echo "remove radiant_config_cache.txt file!"
+  fi
+fi
+
+# any maintenance processes? try to clear them!
+PROCESSES=$(/usr/bin/svcs -a -H -o state,fmri | /usr/bin/grep maintenance | /usr/bin/awk '{ print $2 }')
+for process in $PROCESSES; do
+  /usr/sbin/svcadm clear "$process"
+done
+
+exit 0

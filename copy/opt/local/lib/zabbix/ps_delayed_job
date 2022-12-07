@@ -1,0 +1,11 @@
+#!/usr/bin/bash
+# -*- sh -*-
+
+myname=$(basename "$0" | sed 's/^ps_//g')
+
+name="${name-\<$myname\>}"
+REGEX="${regex-\<$name\>}"
+
+printf "count.value "
+
+/usr/bin/pgrep -f -l "$name" | grep -v grep | wc -l

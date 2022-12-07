@@ -1,0 +1,26 @@
+#!/usr/bin/bash
+
+# sleep a while
+sleep 10
+
+# are all volumes mounted?
+for MOUNTPOINT in $(/usr/bin/cat /etc/vfstab | /usr/bin/grep ' yes ' | /usr/bin/awk '{print $3}'); do
+  if [[ -z `/usr/sbin/mount | /usr/bin/grep "$MOUNTPOINT"` ]]; then
+    /usr/sbin/mount "$MOUNTPOINT"
+  fi
+done
+
+# restore settings
+[[ -x /home/ruby/www/shared/content/bin/restore ]] && /home/ruby/www/shared/content/bin/restore
+
+# first time fetch
+if [[ ! -f /opt/local/pkg/pkg-vulnerabilities ]]; then
+  /opt/local/sbin/pkg_admin fetch-pkg-vulnerabilities
+fi
+
+# fix pkgin issues
+sed -i "s#/var/log/httpd/access-.*##" /etc/logadm.conf
+svcadm restart nullmailer
+
+# bye
+exit 0

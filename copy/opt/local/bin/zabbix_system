@@ -1,0 +1,16 @@
+#!/usr/bin/bash
+
+# sleep random time to prevent that all cron
+# scripts are starting at the same time!
+sleep $((RANDOM % 30))
+
+ZABBIX_CONF=/opt/local/etc/zabbix_agentd.conf
+
+function zsend {
+  /opt/local/bin/zabbix_sender -c $ZABBIX_CONF -k $1 -o $2
+}
+
+# zsend system.openfiles  $(/opt/qutic/bin/psof --count-numbers-only | /usr/bin/bc)
+zsend delayed_job.queue $(sudo -u ruby /opt/local/etc/munin/plugins/dj_queue | awk '{print $2}')
+
+exit 0
