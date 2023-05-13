@@ -2,7 +2,6 @@ gcc10
 gmake
 apache
 nodejs
-npm
 xinit
 cups-base
 ghostscript
