@@ -53,13 +53,13 @@ ln -nfs /opt/local/etc/httpd/ssl /opt/local/etc/httpd/tls
 echo "* Fix passenger";
 echo "export PASSENGER_INSTANCE_REGISTRY_DIR=/var/tmp" >> /root/.bashrc
 # fix wrong passenger pkgsrc build 2017Q4 for ruby 2.7
-ln -nfs /opt/local/lib/ruby/vendor_ruby/2.7.0 /opt/local/lib/ruby/vendor_ruby/2.2.0
+# ln -nfs /opt/local/lib/ruby/vendor_ruby/2.7.0 /opt/local/lib/ruby/vendor_ruby/2.2.0
 
 echo "* Import ruby process watcher";
 svccfg import /opt/qutic/lib/svc/manifest/rbpswatch.xml
 # svcadm enable rbpswatch
 
-echo "* Add squoosh with cli";
+echo "* Add squoosh image compression app with cli";
 npm i -g squoosh
 npm i -g @squoosh/cli
 
@@ -71,7 +71,7 @@ EOF
 # Clean up
 echo "* Cleaning up."
 #pkgin -y remove gmake
-#pkgin -y remove gcc7
+#pkgin -y remove gcc10
 rm /root/customize
 rm -rf /opt/local/var/tmp
 
