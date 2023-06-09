@@ -24,3 +24,5 @@ if mdata-get logstash_type 1>/dev/null 2>&1; then
       -e "s/\"@type\": \"ruby\"/\"@type\": \"${LOGSTASH_TYPE}\"/" \
       /opt/local/etc/beats/filebeat.yml
 fi
+
+svcadm restart svc:/pkgsrc/beats:filebeat
