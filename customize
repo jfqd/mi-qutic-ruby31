@@ -5,6 +5,9 @@ PATH=/opt/local/gnu/bin:/opt/local/bin:/opt/local/sbin:/usr/bin:/usr/sbin
 # Exit if any command fails
 set -o errexit
 
+echo "* ensure latest packages"
+uptodate
+
 echo "* Activate zabbix check"
 ln -nfs /opt/local/lib/zabbix/ps_ /opt/local/lib/zabbix/ps_delayed_job
 

@@ -3,6 +3,7 @@
 ## 20220708.2 - 2023-06-08
 
 * use latest base image 20230313.1
+* ensure latest packages
 * fix passenger.conf
 * add metadata for logstash parsing
 
