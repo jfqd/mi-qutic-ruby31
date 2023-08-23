@@ -1,7 +1,7 @@
 name="qutic-ruby31"
 organization="qutic development"
 brand="Ruby 3.1 Instance"
-version="20220708.2"
+version="20220708.3"
 description="qutic ruby 3.1 image"
 homepage="https://github.com/jfqd/mi-qutic-ruby31"
 users="root admin ruby"

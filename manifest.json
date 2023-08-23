@@ -1,6 +1,6 @@
 {
   "name":         "qutic-ruby31",
-  "version":      "20220708.2",
+  "version":      "20220708.3",
   "description":  "qutic ruby 3.1 image",
   "organization": "qutic development",
   "brand":        "Ruby 3.1 Instance",

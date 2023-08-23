@@ -1,5 +1,9 @@
 # Changelog
 
+## 20220708.3 - 2023-08-23
+
+* restart filebeat after config changes
+
 ## 20220708.2 - 2023-06-08
 
 * use latest base image 20230313.1
